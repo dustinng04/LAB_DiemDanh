@@ -14,7 +14,6 @@ public class SubjectService {
     @Autowired
     private ISubjectRepository subjectRepository;
 
-
     public List<Subjects> getAllSubjects() {
         return subjectRepository.findAll();
     }
