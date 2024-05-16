@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISubjectRepository extends JpaRepository<Subjects,String> {
+public interface ISubjectRepository extends JpaRepository<Subjects,Long> {
 
     @Query(value = "SELECT * FROM subjects WHERE subject_code = :code", nativeQuery = true)
     Subjects getSubjectsByCode(String code);

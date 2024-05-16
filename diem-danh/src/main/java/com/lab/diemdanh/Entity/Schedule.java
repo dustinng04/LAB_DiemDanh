@@ -3,7 +3,6 @@ package com.lab.diemdanh.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Schedule")
@@ -14,14 +13,14 @@ public class Schedule {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "teacher_id")
+    @Column(name = "techear_id")
     private String teacherId;
 
-    @Column(name = "subject_id")
-    private String subjectId;
+    @Column(name = "subject_name")
+    private String subjectName;
 
     @Column(name = "class_id")
-    private int classId;
+    private String classId;
 
     @Column(name = "slot")
     private int slot;
@@ -30,10 +29,10 @@ public class Schedule {
     private String room;
 
     @Column(name = "start_time")
-    private LocalDateTime startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_time")
-    private LocalDateTime endTime;
+    private Timestamp endTime;
 
     @Column(name = "type")
     private String type;
@@ -41,10 +40,10 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(int id, String teacherId, String subjectId, int classId, int slot, String room, LocalDateTime startTime, LocalDateTime endTime, String type) {
+    public Schedule(int id, String teacherId, String subjectName, String classId, int slot, String room, Timestamp startTime, Timestamp endTime, String type) {
         this.id = id;
         this.teacherId = teacherId;
-        this.subjectId = subjectId;
+        this.subjectName = subjectName;
         this.classId = classId;
         this.slot = slot;
         this.room = room;
@@ -69,19 +68,19 @@ public class Schedule {
         this.teacherId = teacherId;
     }
 
-    public String getSubjectId() {
-        return subjectId;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
-    public int getClassId() {
+    public String getClassId() {
         return classId;
     }
 
-    public void setClassId(int classId) {
+    public void setClassId(String classId) {
         this.classId = classId;
     }
 
@@ -101,19 +100,19 @@ public class Schedule {
         this.room = room;
     }
 
-    public LocalDateTime getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
 

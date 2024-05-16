@@ -1,8 +1,12 @@
 package com.lab.diemdanh.Entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "subjects")
 public class Subjects {
     @Id
     @Column(name = "id")
@@ -15,12 +19,21 @@ public class Subjects {
     private String name;
     @Column(name = "type")
     private String type;
-    @Column(name = "totalSlot")
+    @Column(name = "total_slot")
     private int totalSlot;
 //    @Column(name = "status")
 //    private boolean status;
 
     public Subjects() {
+    }
+
+    public Subjects(String id, String headOfDepartment, int category, String name, String type, int totalSlot) {
+        this.id = id;
+        this.headOfDepartment = headOfDepartment;
+        this.category = category;
+        this.name = name;
+        this.type = type;
+        this.totalSlot = totalSlot;
     }
 
     public String getId() {
@@ -70,4 +83,6 @@ public class Subjects {
     public void setTotalSlot(int totalSlot) {
         this.totalSlot = totalSlot;
     }
+
+
 }
