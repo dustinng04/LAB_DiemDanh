@@ -3,6 +3,7 @@ package com.lab.diemdanh.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Schedule")
@@ -13,7 +14,7 @@ public class Schedule {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "techear_id")
+    @Column(name = "teacher_id")
     private String teacherId;
 
     @Column(name = "subject_id")
@@ -29,10 +30,10 @@ public class Schedule {
     private String room;
 
     @Column(name = "start_time")
-    private Timestamp startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time")
-    private Timestamp endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "type")
     private String type;
@@ -40,7 +41,7 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(int id, String teacherId, String subjectId, int classId, int slot, String room, Timestamp startTime, Timestamp endTime, String type) {
+    public Schedule(int id, String teacherId, String subjectId, int classId, int slot, String room, LocalDateTime startTime, LocalDateTime endTime, String type) {
         this.id = id;
         this.teacherId = teacherId;
         this.subjectId = subjectId;
@@ -100,19 +101,19 @@ public class Schedule {
         this.room = room;
     }
 
-    public Timestamp getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
