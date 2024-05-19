@@ -13,6 +13,8 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @Column(name = "plan_id")
+    private int planId;
 
     @Column(name = "teacher_id")
     private String teacherId;
@@ -41,8 +43,9 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(int id, String teacherId, String subjectId, int classId, int slot, String room, LocalDateTime startTime, LocalDateTime endTime, String type) {
+    public Schedule(int id, int planId, String teacherId, String subjectId, int classId, int slot, String room, LocalDateTime startTime, LocalDateTime endTime, String type) {
         this.id = id;
+        this.planId = planId;
         this.teacherId = teacherId;
         this.subjectId = subjectId;
         this.classId = classId;
@@ -59,6 +62,14 @@ public class Schedule {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(int planId) {
+        this.planId = planId;
     }
 
     public String getTeacherId() {

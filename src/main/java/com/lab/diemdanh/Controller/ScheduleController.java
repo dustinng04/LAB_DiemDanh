@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
-    @GetMapping("/schedules")
+    @GetMapping("api/schedules")
     public List<Schedule> getAllSchedules() {
         return scheduleService.getAllSchedules();
     }

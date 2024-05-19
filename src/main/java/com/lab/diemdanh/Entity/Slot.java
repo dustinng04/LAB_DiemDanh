@@ -3,6 +3,7 @@ package com.lab.diemdanh.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "Slot")
@@ -14,35 +15,35 @@ public class Slot {
     private int id;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time")
-    private Time endTime;
+    private LocalTime endTime;
 
-    public Slot(int id, Time endTime, Time startTime) {
+    public Slot(int id, LocalTime startTime, LocalTime endTime) {
         this.id = id;
-        this.endTime = endTime;
         this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Slot() {
 
     }
 
-    public Time getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public int getId() {
