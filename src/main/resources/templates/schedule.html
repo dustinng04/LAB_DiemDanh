@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <span class="text-danger font-weight-bold">YEAR</span>
+            <select id="yearSelect" class="custom-select d-inline-block" style="width: auto;">
+                <option selected>2024</option>
+                <!-- Add more years as needed -->
+            </select>
+        </div>
+        <div>
+            <span class="text-danger font-weight-bold">WEEK</span>
+            <select id="weekSelect" class="custom-select d-inline-block" style="width: auto;">
+                <option th:each="week : ${weeks}" th:text="${week}"></option>
+            </select>
+        </div>
+    </div>
+
+    <table id="scheduleTable" class="table table-bordered text-center">
+        <thead class="thead-light">
+        <tr>
+            <th></th>
+<!--            <th>MON</th>-->
+<!--            <th>TUE</th>-->
+<!--            <th>WED</th>-->
+<!--            <th>THU</th>-->
+<!--            <th>FRI</th>-->
+<!--            <th>SAT</th>-->
+<!--            <th>SUn</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows will be added dynamically via JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function fetchSchedule() {
+            var startDate = $('#weekSelect').val().substring(0,10);
+            $.getJSON('/api/schedule', {startDate: startDate}, function(data) {
+                var scheduleMap = {};
+                data.forEach(function(course) {
+                    var key = course.slot + '-' + new Date(course.startTime).getDate();
+                    if (!scheduleMap[key]) {
+                        scheduleMap[key] = [];
+                    }
+                    scheduleMap[key].push(course);
+                });
+                var day = parseInt(startDate.toString().substring(8,10));
+                addDay(startDate);
+                renderSchedule(scheduleMap, day);
+            });
+        }
+
+        function addDay(startDate) {
+          var $tbody = $('#scheduleTable tbody');
+          var $headerRow = $('#scheduleTable thead tr');
+            $headerRow.empty();
+          var currentDate = new Date(startDate); // Ensure startDate is a Date object
+             $headerRow.append('<td></td>');
+          for (var i = 0; i <= 5; i++) {
+            var dayName = getDayName(currentDate.getDay());
+            var formattedDate = formatDate(currentDate);
+            $headerRow.append('<th>' + dayName + '<br/>' + formattedDate + '</th>');
+
+<!--            $tbody.find('tr').each(function() {-->
+<!--              $(this).append('<td></td>');-->
+<!--            });-->
+
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+
+        function formatDate(date) {
+          var day = date.getDate();
+          var month = date.getMonth() + 1; // Month index starts from 0
+          var formattedDay = (day < 10 ? '0' : '') + day;
+          var formattedMonth = (month < 10 ? '0' : '') + month;
+          return formattedDay + '-' + formattedMonth;
+        }
+
+        function getDayName(dayIndex) {
+          var daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+          return daysOfWeek[dayIndex];
+        }
+
+        function renderSchedule(scheduleMap, d) {
+            var $tbody = $('#scheduleTable tbody');
+            $tbody.empty();
+            for (var slot = 0; slot <= 4; slot++) {
+                var $row = $('<tr/>');
+                $row.append('<th scope="row">Slot ' + slot + '</th>');
+                for (var day = d; day <= d+5; day++) {
+                    var key = slot + '-' + day;
+                    var $cell = $('<td/>');
+                    if (scheduleMap[key]) {
+                        scheduleMap[key].forEach(function(course) {
+                            var courseInfo = '<div><strong>' + course.subjectId + '</strong> at ' + course.room + '<br>';
+                            courseInfo += '<a href="#" class="badge badge-primary">View Materials</a><br>';
+                            courseInfo += '<span class="badge ' + (course.type == 'Online' ? 'badge-success' : 'badge-danger') + '">' + course.type + '</span><br>';
+                            courseInfo += '<span class="text-success">' + new Date(course.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + ' - ' + new Date(course.endTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) + '</span></div>';
+                            $cell.append(courseInfo);
+                        });
+                    } else {
+                        $cell.text('-');
+                    }
+                    $row.append($cell);
+                }
+                $tbody.append($row);
+            }
+        }
+
+
+        $('#yearSelect, #weekSelect').change(fetchSchedule);
+
+        fetchSchedule(); // Initial fetch
+    });
+
+</script>
+</body>
+</html>
