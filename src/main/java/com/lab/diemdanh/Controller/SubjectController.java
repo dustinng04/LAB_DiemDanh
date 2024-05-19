@@ -3,20 +3,19 @@ package com.lab.diemdanh.Controller;
 import com.lab.diemdanh.Entity.Subjects;
 import com.lab.diemdanh.Service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 public class SubjectController {
-//    @Autowired
-//    private SubjectService subjectService;
-//
-//    @GetMapping("/subjects")
-//    public List<Subjects> getAllSubjects() {
-//        return subjectService.getAllSubjects();
+    @Autowired
+    private SubjectService subjectService;
+
+    @GetMapping("/subjects")
+    public List<Subjects> getAllSubjects() {
+        return subjectService.getAllSubjects();
 //    }
 //
 //    @GetMapping("/subjects/{code}")
@@ -52,5 +51,5 @@ public class SubjectController {
 //        subjectService.deleteSubject(code);
 //    }
 
-
+    }
 }
