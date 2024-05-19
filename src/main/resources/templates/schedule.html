@@ -18,8 +18,7 @@
         <div>
             <span class="text-danger font-weight-bold">WEEK</span>
             <select id="weekSelect" class="custom-select d-inline-block" style="width: auto;">
-                <option selected>2024-05-13</option>
-                <!-- Add more weeks as needed -->
+                <option th:each="week : ${weeks}" th:text="${week}"></option>
             </select>
         </div>
     </div>
@@ -28,13 +27,13 @@
         <thead class="thead-light">
         <tr>
             <th></th>
-            <th>MON<br>13/05</th>
-            <th>TUE<br>14/05</th>
-            <th>WED<br>15/05</th>
-            <th>THU<br>16/05</th>
-            <th>FRI<br>17/05</th>
-            <th>SAT<br>18/05</th>
-            <th>SUN<br>19/05</th>
+<!--            <th>MON</th>-->
+<!--            <th>TUE</th>-->
+<!--            <th>WED</th>-->
+<!--            <th>THU</th>-->
+<!--            <th>FRI</th>-->
+<!--            <th>SAT</th>-->
+<!--            <th>SUn</th>-->
         </tr>
         </thead>
         <tbody>
@@ -47,7 +46,7 @@
 <script>
     $(document).ready(function() {
         function fetchSchedule() {
-            var startDate = $('#weekSelect').val();
+            var startDate = $('#weekSelect').val().substring(0,10);
             $.getJSON('/api/schedule', {startDate: startDate}, function(data) {
                 var scheduleMap = {};
                 data.forEach(function(course) {
@@ -57,18 +56,51 @@
                     }
                     scheduleMap[key].push(course);
                 });
-                renderSchedule(scheduleMap);
+                var day = parseInt(startDate.toString().substring(8,10));
+                addDay(startDate);
+                renderSchedule(scheduleMap, day);
             });
         }
 
-        function renderSchedule(scheduleMap) {
+        function addDay(startDate) {
+          var $tbody = $('#scheduleTable tbody');
+          var $headerRow = $('#scheduleTable thead tr');
+            $headerRow.empty();
+          var currentDate = new Date(startDate); // Ensure startDate is a Date object
+             $headerRow.append('<td></td>');
+          for (var i = 0; i <= 5; i++) {
+            var dayName = getDayName(currentDate.getDay());
+            var formattedDate = formatDate(currentDate);
+            $headerRow.append('<th>' + dayName + '<br/>' + formattedDate + '</th>');
+
+<!--            $tbody.find('tr').each(function() {-->
+<!--              $(this).append('<td></td>');-->
+<!--            });-->
+
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+        }
+
+        function formatDate(date) {
+          var day = date.getDate();
+          var month = date.getMonth() + 1; // Month index starts from 0
+          var formattedDay = (day < 10 ? '0' : '') + day;
+          var formattedMonth = (month < 10 ? '0' : '') + month;
+          return formattedDay + '-' + formattedMonth;
+        }
+
+        function getDayName(dayIndex) {
+          var daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+          return daysOfWeek[dayIndex];
+        }
+
+        function renderSchedule(scheduleMap, d) {
             var $tbody = $('#scheduleTable tbody');
             $tbody.empty();
-
             for (var slot = 0; slot <= 4; slot++) {
                 var $row = $('<tr/>');
                 $row.append('<th scope="row">Slot ' + slot + '</th>');
-                for (var day = 13; day <= 19; day++) {
+                for (var day = d; day <= d+5; day++) {
                     var key = slot + '-' + day;
                     var $cell = $('<td/>');
                     if (scheduleMap[key]) {
@@ -88,10 +120,12 @@
             }
         }
 
+
         $('#yearSelect, #weekSelect').change(fetchSchedule);
 
         fetchSchedule(); // Initial fetch
     });
+
 </script>
 </body>
 </html>
