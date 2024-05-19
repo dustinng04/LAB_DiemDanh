@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     List<Schedule> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
+
 }
