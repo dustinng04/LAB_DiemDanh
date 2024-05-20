@@ -30,6 +30,19 @@ public class ClassSubject {
     )
     private List<Student> students;
 
-    // Other properties, constructors, getters, and setters
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 }

@@ -101,7 +101,7 @@ public class PlanService {
         // Check room for firstDay/Second day and if room 2 is not typed
         String room = isFirstDay ? plan.getRoom() : (plan.getRoom2().isEmpty() ? plan.getRoom() : plan.getRoom2());
         int classId = classRepository.getClassByName(plan.getClassName()).getId();
-        List<Integer> classSubId = subjectClassRepository.findIdByClassID(classId);
+        List<Integer> classSubId = subjectClassRepository.findIdByClassIdAndSubjectId(classId,plan.getSubjectId());
         for (int i : classSubId) {
             Schedule schedule = new Schedule(0, plan.getId(), null, plan.getSubjectId(), i, slotId, room, startDateTime, endDateTime, null);
             schedules.add(schedule);
