@@ -35,6 +35,13 @@ public class Attendance {
         this.note = note;
     }
 
+    public Attendance(String studentId, int scheduleId, boolean checked, String note) {
+        this.studentId = studentId;
+        this.scheduleId = scheduleId;
+        this.checked = checked;
+        this.note = note;
+    }
+
     public int getId() {
         return id;
     }

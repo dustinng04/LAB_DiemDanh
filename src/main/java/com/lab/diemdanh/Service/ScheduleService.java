@@ -17,7 +17,6 @@ public class ScheduleService {
     public List<Schedule> getScheduleForWeek(LocalDate startOfWeek) {
         LocalDate start = startOfWeek;
         LocalDate end = start.plusDays(6);
-        System.out.println(start + " %%%%%%%% " + end);
         return scheduleRepository.findByStartTimeBetween(start, end);
     }
 }

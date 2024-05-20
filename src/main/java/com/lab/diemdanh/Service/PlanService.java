@@ -1,12 +1,7 @@
 package com.lab.diemdanh.Service;
 
-import com.lab.diemdanh.Entity.Plan;
-import com.lab.diemdanh.Entity.Schedule;
-import com.lab.diemdanh.Entity.Slot;
-import com.lab.diemdanh.Repository.IClassRepository;
-import com.lab.diemdanh.Repository.IPlanRepository;
-import com.lab.diemdanh.Repository.IScheduleRepository;
-import com.lab.diemdanh.Repository.ISlotRepository;
+import com.lab.diemdanh.Entity.*;
+import com.lab.diemdanh.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +22,11 @@ public class PlanService {
     private ISlotRepository slotRepository;
     @Autowired
     private IClassRepository classRepository;
+    @Autowired
+    private IAttendanceRepository attendanceRepository;
+
+    @Autowired
+    private IClassSubjectRepository subjectClassRepository;
     // Test
     public Plan addPlan(Plan plan) {
         Plan savedPlan = planRepository.save(plan);
@@ -36,7 +36,15 @@ public class PlanService {
         List<Schedule> schedules = generateSchedules(savedPlan, slots);
 
         // Save the generated schedules
-        scheduleRepository.saveAll(schedules);
+        for (Schedule s : schedules) {
+            scheduleRepository.save(s);
+            Schedule newestSchedule = scheduleRepository.findScheduleWithMaxId();
+            List<Student> students = subjectClassRepository.findStudentsByClassId(newestSchedule.getClassId());
+            for (Student stu : students) {
+                Attendance a = new Attendance(stu.getId(), newestSchedule.getId(), false, "");
+                attendanceRepository.save(a);
+            }
+        }
 
         return savedPlan;
     }
@@ -45,14 +53,15 @@ public class PlanService {
         List<Schedule> schedules = new ArrayList<>();
         String[] slotDaysArray = plan.getSlotDays().split(",");
 
+
         for (String slotDay : slotDaysArray) {
             char period = slotDay.charAt(0); // 'P' or 'A'
             int firstDay = Character.getNumericValue(slotDay.charAt(1)); // First day of the week
             int secondDay = Character.getNumericValue(slotDay.charAt(2)); // Second day of the week
 
             // Determine slot IDs based on period
-            int firstSlotId = (period == 'P') ? 1 : 3; // Morning: Slot 1, Afternoon: Slot 3
-            int secondSlotId = (period == 'P') ? 2 : 4; // Morning: Slot 2, Afternoon: Slot 4
+            int firstSlotId = (period == 'P') ? 3 : 1; // Morning: Slot 1, Afternoon: Slot 3
+            int secondSlotId = (period == 'P') ? 4 : 2; // Morning: Slot 2, Afternoon: Slot 4
 
             // Map days to DayOfWeek
             Map<Integer, DayOfWeek> dayMap = Map.of(
@@ -92,9 +101,11 @@ public class PlanService {
         // Check room for firstDay/Second day and if room 2 is not typed
         String room = isFirstDay ? plan.getRoom() : (plan.getRoom2().isEmpty() ? plan.getRoom() : plan.getRoom2());
         int classId = classRepository.getClassByName(plan.getClassName()).getId();
-
-        Schedule schedule = new Schedule(0, plan.getId(), null, plan.getSubjectId(), classId, slotId, room, startDateTime, endDateTime, null);
-        schedules.add(schedule);
+        List<Integer> classSubId = subjectClassRepository.findIdByClassID(classId);
+        for (int i : classSubId) {
+            Schedule schedule = new Schedule(0, plan.getId(), null, plan.getSubjectId(), i, slotId, room, startDateTime, endDateTime, null);
+            schedules.add(schedule);
+        }
     }
 
 }

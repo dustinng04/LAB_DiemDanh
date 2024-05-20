@@ -1,6 +1,7 @@
 package com.lab.diemdanh.Entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Class")
@@ -13,6 +14,9 @@ public class Class {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "aClass")
+    private List<ClassSubject> classSubjects;
 
     public Class() {
     }
