@@ -13,4 +13,9 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query("SELECT s FROM Schedule s WHERE DATE(s.startTime) >= DATE(:start) AND DATE(s.endTime) <= DATE(:end) ")
     List<Schedule> findByStartTimeBetween(LocalDate start, LocalDate end);
 
+    @Query("SELECT s FROM Schedule s WHERE DATE(s.startTime) >= DATE(:start) AND DATE(s.endTime) <= DATE(:end) AND s.classId = :classId")
+    List<Schedule> findScheduleOfClass(LocalDate start, LocalDate end, int classId);
+
+    @Query("SELECT s FROM Schedule s WHERE s.id = (SELECT MAX(id) FROM Schedule)")
+    Schedule findScheduleWithMaxId();
 }

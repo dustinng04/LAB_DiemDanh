@@ -9,6 +9,7 @@
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
+            <input id="studentId" type="text" readonly th:value="${studentId}"></input>
             <span class="text-danger font-weight-bold">YEAR</span>
             <select id="yearSelect" class="custom-select d-inline-block" style="width: auto;">
                 <option selected>2024</option>
@@ -47,7 +48,8 @@
     $(document).ready(function() {
         function fetchSchedule() {
             var startDate = $('#weekSelect').val().substring(0,10);
-            $.getJSON('/api/schedule', {startDate: startDate}, function(data) {
+            var studentId = $('#studentId').val();
+            $.getJSON('/api/schedule/' + studentId, {startDate: startDate}, function(data) {
                 var scheduleMap = {};
                 data.forEach(function(course) {
                     var key = course.slot + '-' + new Date(course.startTime).getDate();

@@ -1,16 +1,16 @@
 package com.lab.diemdanh.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "Students")
 public class Student {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name = "major")
@@ -19,13 +19,17 @@ public class Student {
     @Column(name = "image_link")
     private String image;
 
-    public Student(String id, String major, String image) {
+    @ManyToMany(mappedBy = "students")
+    private List<ClassSubject> classSubjects;
+
+    public Student() {
+    }
+
+    public Student(String id, String major, String image, List<ClassSubject> classSubjects) {
         this.id = id;
         this.major = major;
         this.image = image;
-    }
-
-    public Student() {
+        this.classSubjects = classSubjects;
     }
 
     public String getId() {
@@ -51,4 +55,13 @@ public class Student {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public List<ClassSubject> getClassSubjects() {
+        return classSubjects;
+    }
+
+    public void setClassSubjects(List<ClassSubject> classSubjects) {
+        this.classSubjects = classSubjects;
+    }
+
 }

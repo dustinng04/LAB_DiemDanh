@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,8 +20,8 @@ public class ScheduleViewController {
 
     @Autowired
     IScheduleRepository scheduleRepository;
-    @GetMapping("/schedule")
-    public String getSchedulePage(ModelMap modelMap) {
+    @GetMapping("/schedule/{studentId}")
+    public String getSchedulePage(ModelMap modelMap, @PathVariable String studentId) {
         List<String> scheduleTime = new ArrayList<>();
         LocalDate currentDate = LocalDate.parse("2024-05-06");
         while (!currentDate.isAfter(LocalDate.parse("2024-07-10"))) {
@@ -29,6 +30,7 @@ public class ScheduleViewController {
         }
 
         modelMap.addAttribute("weeks",scheduleTime);
+        modelMap.addAttribute("studentId", studentId);
         return "schedule";
     }
 }
