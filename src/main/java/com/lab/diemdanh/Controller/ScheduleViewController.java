@@ -1,7 +1,10 @@
 package com.lab.diemdanh.Controller;
 
 import com.lab.diemdanh.Entity.Schedule;
+import com.lab.diemdanh.Entity.Semester;
 import com.lab.diemdanh.Repository.IScheduleRepository;
+import com.lab.diemdanh.Repository.ISemesterRepository;
+import com.lab.diemdanh.Service.SemesterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
@@ -20,11 +23,14 @@ public class ScheduleViewController {
 
     @Autowired
     IScheduleRepository scheduleRepository;
+    @Autowired
+    SemesterService semesterService;
     @GetMapping("/schedule/{studentId}")
     public String getSchedulePage(ModelMap modelMap, @PathVariable String studentId) {
         List<String> scheduleTime = new ArrayList<>();
-        LocalDate currentDate = LocalDate.parse("2024-05-06");
-        while (!currentDate.isAfter(LocalDate.parse("2024-07-10"))) {
+        Semester s = semesterService.findById(1);
+        LocalDate currentDate = s.getStartDate();
+        while (!currentDate.isAfter(s.getEndDate())) {
             scheduleTime.add(currentDate + " to " + currentDate.plusDays(6));
             currentDate = currentDate.plusDays(7);
         }

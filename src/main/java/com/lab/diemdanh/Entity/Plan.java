@@ -24,7 +24,7 @@ public class Plan {
     @Column(name = "room")
     private String room;
     @Column(name = "room2")
-    private String room2;
+    private String room2 = "";
     @Column(name = "semester_id")
     private int semesterId;
     @Column(name = "start_date")
@@ -144,5 +144,23 @@ public class Plan {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Plan{" +
+                "id=" + id +
+                ", className='" + className + '\'' +
+                ", subjectId='" + subjectId + '\'' +
+                ", dept='" + dept + '\'' +
+                ", slotDays='" + slotDays + '\'' +
+                ", slot1='" + slot1 + '\'' +
+                ", slot2='" + slot2 + '\'' +
+                ", room='" + room + '\'' +
+                ", room2='" + room2 + '\'' +
+                ", semesterId=" + semesterId +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }

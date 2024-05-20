@@ -2,6 +2,7 @@ package com.lab.diemdanh.Entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,15 +18,15 @@ public class    Semester {
     private String name;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     public Semester() {
     }
 
-    public Semester(int id, String name, Date startDate, Date endDate) {
+    public Semester(int id, String name, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -48,19 +49,19 @@ public class    Semester {
         this.name = name;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 }

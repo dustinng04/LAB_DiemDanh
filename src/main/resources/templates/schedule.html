@@ -52,15 +52,17 @@
             $.getJSON('/api/schedule/' + studentId, {startDate: startDate}, function(data) {
                 var scheduleMap = {};
                 data.forEach(function(course) {
-                    var key = course.slot + '-' + new Date(course.startTime).getDate();
+
+                    var key = course.slot + '-' + (new Date(course.startTime).getMonth()+1) + '-' + new Date(course.startTime).getDate();
                     if (!scheduleMap[key]) {
                         scheduleMap[key] = [];
                     }
+                    console.log(key);
                     scheduleMap[key].push(course);
                 });
-                var day = parseInt(startDate.toString().substring(8,10));
+
                 addDay(startDate);
-                renderSchedule(scheduleMap, day);
+                renderSchedule(scheduleMap, startDate);
             });
         }
 
@@ -96,15 +98,22 @@
           return daysOfWeek[dayIndex];
         }
 
-        function renderSchedule(scheduleMap, d) {
+
+        function renderSchedule(scheduleMap, startDate) {
             var $tbody = $('#scheduleTable tbody');
             $tbody.empty();
-            for (var slot = 0; slot <= 4; slot++) {
+            var d = parseInt(startDate.toString().substring(8,10));
+            var dateNew
+            for (var slot = 1; slot <= 4; slot++) {
                 var $row = $('<tr/>');
                 $row.append('<th scope="row">Slot ' + slot + '</th>');
+                dateNew  = new Date(startDate);
                 for (var day = d; day <= d+5; day++) {
-                    var key = slot + '-' + day;
+                    var date = formatDate(dateNew);
+                    dateNew.setDate(dateNew.getDate()+1);
+                    var key = slot + '-' + parseInt(date.toString().substring(3,5)) + '-' + parseInt(date.toString().substring(0,2));
                     var $cell = $('<td/>');
+                    console.log("New: " + key);
                     if (scheduleMap[key]) {
                         scheduleMap[key].forEach(function(course) {
                             var courseInfo = '<div><strong>' + course.subjectId + '</strong> at ' + course.room + '<br>';
