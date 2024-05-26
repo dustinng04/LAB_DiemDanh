@@ -27,6 +27,7 @@ public class PlanService {
 
     @Autowired
     private IClassSubjectRepository subjectClassRepository;
+
     // Test
     public Plan addPlan(Plan plan) {
         Plan savedPlan = planRepository.save(plan);
@@ -53,6 +54,8 @@ public class PlanService {
         List<Schedule> schedules = new ArrayList<>();
         String[] slotDaysArray = plan.getSlotDays().split(",");
 
+        int scheduleCount = 0;
+        final int MAX_SCHEDULES = 20;
 
         for (String slotDay : slotDaysArray) {
             char period = slotDay.charAt(0); // 'P' or 'A'
@@ -73,14 +76,16 @@ public class PlanService {
             );
 
             LocalDate currentDate = plan.getStartDate();
-            while (!currentDate.isAfter(plan.getEndDate())) {
+            while (!currentDate.isAfter(plan.getEndDate()) && scheduleCount < MAX_SCHEDULES) {
                 DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
 
                 if (currentDayOfWeek == dayMap.get(firstDay)) {
                     addSchedule(plan, schedules, slots, currentDate, firstSlotId, true);
+                    scheduleCount++;
                 }
-                if (currentDayOfWeek == dayMap.get(secondDay)) {
+                if (currentDayOfWeek == dayMap.get(secondDay) && scheduleCount < MAX_SCHEDULES) {
                     addSchedule(plan, schedules, slots, currentDate, secondSlotId, false);
+                    scheduleCount++;
                 }
 
                 currentDate = currentDate.plusDays(1);
@@ -101,11 +106,10 @@ public class PlanService {
         // Check room for firstDay/Second day and if room 2 is not typed
         String room = isFirstDay ? plan.getRoom() : (plan.getRoom2().isEmpty() ? plan.getRoom() : plan.getRoom2());
         int classId = classRepository.getClassByName(plan.getClassName()).getId();
-        List<Integer> classSubId = subjectClassRepository.findIdByClassIdAndSubjectId(classId,plan.getSubjectId());
+        List<Integer> classSubId = subjectClassRepository.findIdByClassIdAndSubjectId(classId, plan.getSubjectId());
         for (int i : classSubId) {
             Schedule schedule = new Schedule(0, plan.getId(), null, plan.getSubjectId(), i, slotId, room, startDateTime, endDateTime, null);
             schedules.add(schedule);
         }
     }
-
 }
